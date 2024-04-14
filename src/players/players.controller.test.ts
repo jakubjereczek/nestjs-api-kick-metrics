@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PlayersController } from './players.controller';
 import { PlayersService } from './players.service';
-import { Player } from './interfaces/player.interface';
+import { Player } from '../core/entities/player.entity';
 
 describe('PlayersController', () => {
   let playersController: PlayersController;
@@ -49,10 +49,14 @@ describe('PlayersController', () => {
             interceptions: 10,
             fouls_committed: 8,
             fouls_suffered: 12,
+            id: 0,
+            player: this,
           },
         },
       ];
-      jest.spyOn(playersService, 'getAll').mockImplementation(() => result);
+      jest
+        .spyOn(playersService, 'getAll')
+        .mockImplementation(async () => result);
       expect(await playersController.getAll()).toBe(result);
     });
   });

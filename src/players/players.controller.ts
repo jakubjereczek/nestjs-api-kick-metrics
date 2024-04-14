@@ -7,7 +7,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { PlayersService } from './players.service';
-import { Player } from './interfaces/player.interface';
+import { Player } from '../core/entities/player.entity';
 import { CreatePlayerDto } from './dto/create-player.dto';
 
 @Controller('players')
