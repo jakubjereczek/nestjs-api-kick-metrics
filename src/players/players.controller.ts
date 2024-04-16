@@ -2,21 +2,23 @@ import {
   Body,
   Controller,
   Get,
+  Put,
   Param,
-  ParseIntPipe,
   Post,
+  Delete,
 } from '@nestjs/common';
 import { PlayersService } from './players.service';
 import { Player } from '../core/entities/player.entity';
 import { CreatePlayerDto } from './dto/create-player.dto';
+import { UpdatePlayerDto } from './dto/update-player.dto';
 
 @Controller('players')
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
 
   @Post()
-  async create(@Body() createPlayerDto: CreatePlayerDto) {
-    this.playersService.create(createPlayerDto);
+  async create(@Body() dto: CreatePlayerDto) {
+    this.playersService.create(dto);
   }
 
   @Get()
@@ -26,9 +28,22 @@ export class PlayersController {
 
   @Get(':id')
   findOne(
-    @Param('id', new ParseIntPipe())
+    @Param('id')
     id: string,
   ) {
     return this.playersService.getById(id);
+  }
+
+  @Put()
+  async update(@Body() dto: UpdatePlayerDto) {
+    this.playersService.updateById(dto);
+  }
+
+  @Delete(':id')
+  async delete(
+    @Param('id')
+    id: string,
+  ) {
+    this.playersService.deleteById(id);
   }
 }

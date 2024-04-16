@@ -1,19 +1,27 @@
 import { IsInt, IsString, IsOptional } from 'class-validator';
 
-export class CreatePlayerDto {
+export class UpdatePlayerDto {
   @IsString()
+  readonly id: string;
+
+  @IsString()
+  @IsOptional()
   readonly name: string;
 
   @IsInt()
+  @IsOptional()
   readonly age: number;
 
   @IsString()
+  @IsOptional()
   readonly nationality: string;
 
   @IsString()
+  @IsOptional()
   readonly club: string;
 
   @IsString()
+  @IsOptional()
   readonly position: string;
 
   @IsOptional()
