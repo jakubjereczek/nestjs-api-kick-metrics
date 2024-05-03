@@ -1,39 +1,29 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsInt, IsString, IsOptional } from 'class-validator';
+import { PlayerStatisticsDto } from './player-statistics.dto';
 
 export class CreatePlayerDto {
   @IsString()
+  @ApiProperty()
   readonly name: string;
 
   @IsInt()
+  @ApiProperty()
   readonly age: number;
 
   @IsString()
+  @ApiProperty()
   readonly nationality: string;
 
   @IsString()
+  @ApiProperty()
   readonly club: string;
 
   @IsString()
+  @ApiProperty()
   readonly position: string;
 
   @IsOptional()
-  readonly statistics: {
-    appearances: number;
-    goals: number;
-    assists: number;
-    yellow_cards: number;
-    red_cards: number;
-    passes_completed: number;
-    passes_attempted: number;
-    pass_accuracy: number;
-    shots_on_target: number;
-    shot_accuracy: number;
-    dribbles_completed: number;
-    dribbles_attempted: number;
-    dribble_success_rate: number;
-    tackles_won: number;
-    interceptions: number;
-    fouls_committed: number;
-    fouls_suffered: number;
-  };
+  @ApiPropertyOptional()
+  readonly statistics: PlayerStatisticsDto;
 }
