@@ -18,7 +18,7 @@ export class PlayersController {
 
   @Post()
   async create(@Body() dto: CreatePlayerDto) {
-    this.playersService.create(dto);
+    return this.playersService.create(dto);
   }
 
   @Get()
@@ -27,7 +27,7 @@ export class PlayersController {
   }
 
   @Get(':id')
-  findOne(
+  getById(
     @Param('id')
     id: string,
   ) {
@@ -35,15 +35,15 @@ export class PlayersController {
   }
 
   @Put()
-  async update(@Body() dto: UpdatePlayerDto) {
-    this.playersService.updateById(dto);
+  async updateById(@Body() dto: UpdatePlayerDto) {
+    return this.playersService.updateById(dto);
   }
 
   @Delete(':id')
-  async delete(
+  async deleteById(
     @Param('id')
     id: string,
   ) {
-    this.playersService.deleteById(id);
+    return this.playersService.deleteById(id);
   }
 }

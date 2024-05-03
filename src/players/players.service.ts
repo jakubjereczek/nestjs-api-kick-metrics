@@ -15,7 +15,7 @@ export class PlayersService {
   ) {}
 
   public create(player: CreatePlayerDto) {
-    this.playersRepository.create({
+    return this.playersRepository.create({
       id: uuid(),
       ...player,
       ...(!player.statistics && { statistics: getNewStatistics() }),
