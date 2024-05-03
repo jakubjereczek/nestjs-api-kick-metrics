@@ -1,3 +1,4 @@
+import { DeleteResult, UpdateResult } from 'typeorm';
 import {
   Body,
   Controller,
@@ -17,7 +18,7 @@ export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
 
   @Post()
-  async create(@Body() dto: CreatePlayerDto) {
+  async create(@Body() dto: CreatePlayerDto): Promise<Player> {
     return this.playersService.create(dto);
   }
 
@@ -30,12 +31,12 @@ export class PlayersController {
   getById(
     @Param('id')
     id: string,
-  ) {
+  ): Promise<Player> {
     return this.playersService.getById(id);
   }
 
   @Put()
-  async updateById(@Body() dto: UpdatePlayerDto) {
+  async updateById(@Body() dto: UpdatePlayerDto): Promise<UpdateResult> {
     return this.playersService.updateById(dto);
   }
 
@@ -43,7 +44,8 @@ export class PlayersController {
   async deleteById(
     @Param('id')
     id: string,
-  ) {
+  ): Promise<DeleteResult> {
+    console.log('thisPlayersService', this.playersService);
     return this.playersService.deleteById(id);
   }
 }
