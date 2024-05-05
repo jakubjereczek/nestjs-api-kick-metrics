@@ -4,23 +4,25 @@ import { PlayerStatisticsDto } from './player-statistics.dto';
 
 export class CreatePlayerDto {
   @IsString()
-  @ApiProperty()
+  @ApiProperty({ description: 'The full name of the player' })
   readonly name: string;
 
   @IsInt()
-  @ApiProperty()
+  @ApiProperty({ description: 'The age of the player in years' })
   readonly age: number;
 
   @IsString()
-  @ApiProperty()
+  @ApiProperty({ description: 'The nationality of the player' })
   readonly nationality: string;
 
   @IsString()
-  @ApiProperty()
+  @ApiProperty({ description: 'The club that the player currently plays for' })
   readonly club: string;
 
   @IsString()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The playing position of the player on the field',
+  })
   readonly position: string;
 
   @IsOptional()

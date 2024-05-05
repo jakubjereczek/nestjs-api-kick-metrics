@@ -11,27 +11,31 @@ export class UpdatePlayerDto {
 
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ description: 'The full name of the player' })
   readonly name: string;
 
   @IsInt()
   @IsOptional()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ description: 'The age of the player in years' })
   readonly age: number;
 
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ description: 'The nationality of the player' })
   readonly nationality: string;
 
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'The club that the player currently plays for',
+  })
   readonly club: string;
 
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'The playing position of the player on the field',
+  })
   readonly position: string;
 
   @IsOptional()
