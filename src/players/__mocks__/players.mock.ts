@@ -1,4 +1,4 @@
-import { Player } from 'src/core/entities/player.entity';
+import { Player } from '../../core/entities/player.entity';
 
 // Generated sample data for tests
 
@@ -62,3 +62,30 @@ export const players: Player[] = [
     },
   },
 ];
+
+export const newPlayer = {
+  name: 'Arkadiusz Szymański',
+  age: 27,
+  nationality: 'Polish',
+  club: 'AC Milan',
+  position: 'Midfielder',
+  statistics: {
+    appearances: 30,
+    goals: 10,
+    assists: 8,
+    yellow_cards: 3,
+    red_cards: 1,
+    passes_completed: 400,
+    passes_attempted: 480,
+    pass_accuracy: 83.33,
+    shots_on_target: 20,
+    shot_accuracy: 50.0,
+    dribbles_completed: 25,
+    dribbles_attempted: 40,
+    dribble_success_rate: 62.5,
+    tackles_won: 20,
+    interceptions: 15,
+    fouls_committed: 10,
+    fouls_suffered: 18,
+  },
+};

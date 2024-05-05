@@ -2,14 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { PlayersController } from './players.controller';
 import { PlayersService } from './players.service';
-import { players } from './__mocks__/players.mock';
+import { newPlayer, players } from './__mocks__/players.mock';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
-import { findById } from '../core/utils/array';
+import { findBy, findAllBy } from '../core/utils/array';
 
 describe('PlayersController', () => {
   let playersController: PlayersController;
-  let playersService2: PlayersService;
+  let playersService: PlayersService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -25,14 +25,19 @@ describe('PlayersController', () => {
                 Promise.resolve(dto),
               ),
             getAll: jest.fn().mockResolvedValue(players),
+            getAllByClub: jest
+              .fn()
+              .mockImplementation((club: string) =>
+                Promise.resolve(findAllBy(players, 'club', club)),
+              ),
             getById: jest
               .fn()
               .mockImplementation((id: string) =>
-                Promise.resolve(findById(players, id)),
+                Promise.resolve(findBy(players, 'id', id)),
               ),
             updateById: jest.fn().mockImplementation((dto: UpdatePlayerDto) => {
               return Promise.resolve({
-                ...findById(players, dto.id),
+                ...findBy(players, 'id', dto.id),
                 ...dto,
               });
             }),
@@ -49,7 +54,7 @@ describe('PlayersController', () => {
     }).compile();
 
     playersController = module.get<PlayersController>(PlayersController);
-    playersService2 = module.get<PlayersService>(PlayersService);
+    playersService = module.get<PlayersService>(PlayersService);
   });
 
   it('should be defined', () => {
@@ -58,36 +63,11 @@ describe('PlayersController', () => {
 
   describe('create method: ', () => {
     it('should add new player', async () => {
-      const dto: CreatePlayerDto = {
-        name: 'Arkadiusz Szymański',
-        age: 27,
-        nationality: 'Polish',
-        club: 'AC Milan',
-        position: 'Midfielder',
-        statistics: {
-          appearances: 30,
-          goals: 10,
-          assists: 8,
-          yellow_cards: 3,
-          red_cards: 1,
-          passes_completed: 400,
-          passes_attempted: 480,
-          pass_accuracy: 83.33,
-          shots_on_target: 20,
-          shot_accuracy: 50.0,
-          dribbles_completed: 25,
-          dribbles_attempted: 40,
-          dribble_success_rate: 62.5,
-          tackles_won: 20,
-          interceptions: 15,
-          fouls_committed: 10,
-          fouls_suffered: 18,
-        },
-      };
+      const dto: CreatePlayerDto = newPlayer;
 
       const result = await playersController.create(dto);
 
-      expect(playersService2.create).toHaveBeenCalled();
+      expect(playersService.create).toHaveBeenCalled();
       expect(result).toEqual(dto);
     });
   });
@@ -96,8 +76,18 @@ describe('PlayersController', () => {
     it('should return players list', async () => {
       const result = await playersController.getAll();
 
-      expect(playersService2.getAll).toHaveBeenCalled();
+      expect(playersService.getAll).toHaveBeenCalled();
       expect(result).toBe(players);
+    });
+  });
+
+  describe('getAllByClub method:', () => {
+    it('should return players list by club name', async () => {
+      const club = 'Manchester United';
+      const result = await playersController.getAllByClub(club);
+
+      expect(playersService.getAllByClub).toHaveBeenCalled();
+      expect(result).toEqual(findAllBy(players, 'club', club));
     });
   });
 
@@ -105,7 +95,7 @@ describe('PlayersController', () => {
     it('should return player data', async () => {
       const result = await playersController.getById(players[0].id);
 
-      expect(playersService2.getById).toHaveBeenCalled();
+      expect(playersService.getById).toHaveBeenCalled();
       expect(result).toEqual(players[0]);
     });
   });
@@ -124,7 +114,7 @@ describe('PlayersController', () => {
 
       const result = await playersController.updateById(dto);
 
-      expect(playersService2.updateById).toHaveBeenCalledWith(dto);
+      expect(playersService.updateById).toHaveBeenCalledWith(dto);
       expect(result).toEqual({
         ...players['d630b1cc-efb1-45e3-9f92-ae9d2d25a1c6'],
         ...dto,
@@ -136,7 +126,7 @@ describe('PlayersController', () => {
     it('should delete player', async () => {
       await playersController.deleteById('id');
 
-      expect(playersService2.deleteById).toHaveBeenCalled();
+      expect(playersService.deleteById).toHaveBeenCalled();
     });
   });
 });

@@ -19,25 +19,33 @@ export class PlayersController {
 
   @Post()
   async create(@Body() dto: CreatePlayerDto): Promise<Player> {
-    return this.playersService.create(dto);
+    return await this.playersService.create(dto);
   }
 
   @Get()
   async getAll(): Promise<Player[]> {
-    return this.playersService.getAll();
+    return await this.playersService.getAll();
+  }
+
+  @Get(':club')
+  async getAllByClub(
+    @Param('club')
+    club: string,
+  ): Promise<Player[]> {
+    return await this.playersService.getAllByClub(club);
   }
 
   @Get(':id')
-  getById(
+  async getById(
     @Param('id')
     id: string,
   ): Promise<Player> {
-    return this.playersService.getById(id);
+    return await this.playersService.getById(id);
   }
 
   @Put()
   async updateById(@Body() dto: UpdatePlayerDto): Promise<UpdateResult> {
-    return this.playersService.updateById(dto);
+    return await this.playersService.updateById(dto);
   }
 
   @Delete(':id')
@@ -45,7 +53,6 @@ export class PlayersController {
     @Param('id')
     id: string,
   ): Promise<DeleteResult> {
-    console.log('thisPlayersService', this.playersService);
-    return this.playersService.deleteById(id);
+    return await this.playersService.deleteById(id);
   }
 }
