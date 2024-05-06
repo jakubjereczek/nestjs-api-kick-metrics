@@ -1,16 +1,19 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { uuid } from 'uuidv4';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Player } from '../core/entities/player.entity';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
+import { PlayerStatistics } from 'src/core/entities/player-statistics.entity';
 
 @Injectable()
 export class PlayersService {
   constructor(
     @InjectRepository(Player)
     private playersRepository: Repository<Player>,
+    @InjectRepository(PlayerStatistics)
+    private _statisticsRepository: Repository<PlayerStatistics>,
   ) {}
 
   public create(player: CreatePlayerDto) {
@@ -74,8 +77,32 @@ export class PlayersService {
   public updateById({ id, ...player }: UpdatePlayerDto) {
     return this.playersRepository.update({ id }, player);
   }
+  public async deleteById(id: string): Promise<Player> {
+    try {
+      const player = await this.getById(id);
+      if (!player) {
+        throw new HttpException(
+          'The record with the given id was not found.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      if (player.statistics?.id) {
+        const statistics = await this._statisticsRepository.findOne({
+          where: { id: player.statistics.id },
+        });
+        if (statistics) {
+          await this._statisticsRepository.remove(statistics);
+        }
+      }
+      return await this.playersRepository.remove(player);
+    } catch (error) {
+      console.error('Failed to delete player:', error);
 
-  public deleteById(id: string) {
-    return this.playersRepository.delete({ id });
+      throw new HttpException(
+        'A generic server error occurred',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error },
+      );
+    }
   }
 }

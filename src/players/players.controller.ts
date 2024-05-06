@@ -1,4 +1,4 @@
-import { DeleteResult, UpdateResult } from 'typeorm';
+import { UpdateResult } from 'typeorm';
 import {
   Body,
   Controller,
@@ -52,7 +52,7 @@ export class PlayersController {
   async deleteById(
     @Param('id')
     id: string,
-  ): Promise<DeleteResult> {
+  ): Promise<Player> {
     return await this.playersService.deleteById(id);
   }
 }

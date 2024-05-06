@@ -41,13 +41,11 @@ describe('PlayersController', () => {
                 ...dto,
               });
             }),
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            deleteById: jest.fn().mockImplementation((id: string) =>
-              Promise.resolve({
-                raw: '', // raw SQL result returned by executed query
-                affected: null, // number of affected rows/documents
-              }),
-            ),
+            deleteById: jest
+              .fn()
+              .mockImplementation((id: string) =>
+                Promise.resolve(findBy(players, 'id', id)),
+              ),
           },
         },
       ],
