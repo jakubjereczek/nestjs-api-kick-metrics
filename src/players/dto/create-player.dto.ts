@@ -8,8 +8,8 @@ export class CreatePlayerDto {
   readonly name: string;
 
   @IsInt()
-  @ApiProperty({ description: 'The age of the player in years' })
-  readonly age: number;
+  @ApiProperty({ description: 'The born date of the player' })
+  readonly born: Date;
 
   @IsString()
   @ApiProperty({ description: 'The nationality of the player' })

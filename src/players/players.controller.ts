@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { PlayersService } from './players.service';
 import { Player } from '../core/entities/player.entity';
@@ -17,30 +18,22 @@ import { UpdatePlayerDto } from './dto/update-player.dto';
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
 
-  @Post()
-  async create(@Body() dto: CreatePlayerDto): Promise<Player> {
-    return await this.playersService.create(dto);
-  }
-
   @Get()
-  async getAll(): Promise<Player[]> {
+  async getPlayers(
+    @Query('club')
+    club: string | undefined,
+    @Query('id')
+    id: string | undefined,
+  ): Promise<Player[]> {
+    if (club || id) {
+      return await this.playersService.getByParams({ id, club });
+    }
     return await this.playersService.getAll();
   }
 
-  @Get(':club')
-  async getAllByClub(
-    @Param('club')
-    club: string,
-  ): Promise<Player[]> {
-    return await this.playersService.getAllByClub(club);
-  }
-
-  @Get(':id')
-  async getById(
-    @Param('id')
-    id: string,
-  ): Promise<Player> {
-    return await this.playersService.getById(id);
+  @Post()
+  async create(@Body() dto: CreatePlayerDto): Promise<Player> {
+    return await this.playersService.create(dto);
   }
 
   @Put()

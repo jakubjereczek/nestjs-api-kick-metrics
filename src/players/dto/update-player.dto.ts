@@ -16,8 +16,8 @@ export class UpdatePlayerDto {
 
   @IsInt()
   @IsOptional()
-  @ApiPropertyOptional({ description: 'The age of the player in years' })
-  readonly age: number;
+  @ApiPropertyOptional({ description: 'The born date of the player' })
+  readonly born: Date;
 
   @IsString()
   @IsOptional()

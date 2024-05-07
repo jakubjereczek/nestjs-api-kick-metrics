@@ -5,7 +5,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Player } from '../core/entities/player.entity';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
-import { PlayerStatistics } from 'src/core/entities/player-statistics.entity';
+import { PlayerStatistics } from '../core//entities/player-statistics.entity';
 
 @Injectable()
 export class PlayersService {
@@ -44,8 +44,8 @@ export class PlayersService {
     });
   }
 
-  public getById(id: string) {
-    return this.playersRepository.findOne({
+  private async getById(id: string) {
+    return await this.playersRepository.findOne({
       where: {
         id,
       },
@@ -55,27 +55,54 @@ export class PlayersService {
     });
   }
 
-  public getAll() {
-    return this.playersRepository.find({
-      relations: {
-        statistics: true,
-      },
-    });
+  public async getAll() {
+    try {
+      return await this.playersRepository.find({
+        relations: {
+          statistics: true,
+        },
+      });
+    } catch (error) {
+      console.error('Failed to get player list', error);
+
+      throw new HttpException(
+        'A generic server error occurred.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error },
+      );
+    }
   }
 
-  public getAllByClub(club: string) {
-    return this.playersRepository.find({
-      where: {
-        club,
-      },
-      relations: {
-        statistics: true,
-      },
-    });
+  public async getByParams({
+    id,
+    club,
+  }: {
+    id: string | undefined;
+    club: string | undefined;
+  }) {
+    try {
+      return await this.playersRepository.find({
+        where: {
+          id,
+          club,
+        },
+        relations: {
+          statistics: true,
+        },
+      });
+    } catch (error) {
+      console.error('Failed to get player by params.', error);
+
+      throw new HttpException(
+        'A generic server error occurred.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error },
+      );
+    }
   }
 
-  public updateById({ id, ...player }: UpdatePlayerDto) {
-    return this.playersRepository.update({ id }, player);
+  public async updateById({ id, ...player }: UpdatePlayerDto) {
+    return await this.playersRepository.update({ id }, player);
   }
   public async deleteById(id: string): Promise<Player> {
     try {
@@ -96,10 +123,10 @@ export class PlayersService {
       }
       return await this.playersRepository.remove(player);
     } catch (error) {
-      console.error('Failed to delete player:', error);
+      console.error('Failed to delete player.', error);
 
       throw new HttpException(
-        'A generic server error occurred',
+        'A generic server error occurred.',
         HttpStatus.INTERNAL_SERVER_ERROR,
         { cause: error },
       );

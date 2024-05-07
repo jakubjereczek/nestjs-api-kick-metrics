@@ -25,16 +25,23 @@ describe('PlayersController', () => {
                 Promise.resolve(dto),
               ),
             getAll: jest.fn().mockResolvedValue(players),
-            getAllByClub: jest
-              .fn()
-              .mockImplementation((club: string) =>
-                Promise.resolve(findAllBy(players, 'club', club)),
-              ),
-            getById: jest
-              .fn()
-              .mockImplementation((id: string) =>
-                Promise.resolve(findBy(players, 'id', id)),
-              ),
+            getByParams: jest.fn().mockImplementation(({ id, club }: any) => {
+              console.log('return', {
+                response: findAllBy(players, {
+                  ...(id && { id }),
+                  ...(club && { club }),
+                }),
+                query: {
+                  id,
+                  club,
+                },
+                players,
+              });
+              return findAllBy(players, {
+                ...(id && { id }),
+                ...(club && { club }),
+              });
+            }),
             updateById: jest.fn().mockImplementation((dto: UpdatePlayerDto) => {
               return Promise.resolve({
                 ...findBy(players, 'id', dto.id),
@@ -70,31 +77,30 @@ describe('PlayersController', () => {
     });
   });
 
-  describe('getAll method:', () => {
+  describe('getPlayers method:', () => {
     it('should return players list', async () => {
-      const result = await playersController.getAll();
+      const result = await playersController.getPlayers(undefined, undefined);
 
       expect(playersService.getAll).toHaveBeenCalled();
       expect(result).toBe(players);
     });
-  });
 
-  describe('getAllByClub method:', () => {
     it('should return players list by club name', async () => {
       const club = 'Manchester United';
-      const result = await playersController.getAllByClub(club);
+      const result = await playersController.getPlayers(club, undefined);
 
-      expect(playersService.getAllByClub).toHaveBeenCalled();
-      expect(result).toEqual(findAllBy(players, 'club', club));
+      expect(playersService.getByParams).toHaveBeenCalled();
+      expect(result).toEqual(findAllBy(players, { club }));
     });
-  });
 
-  describe('getById method: ', () => {
-    it('should return player data', async () => {
-      const result = await playersController.getById(players[0].id);
+    it('should return player by id', async () => {
+      const result = await playersController.getPlayers(
+        undefined,
+        players[0].id,
+      );
 
-      expect(playersService.getById).toHaveBeenCalled();
-      expect(result).toEqual(players[0]);
+      expect(playersService.getByParams).toHaveBeenCalled();
+      expect(result).toEqual([players[0]]);
     });
   });
 
@@ -103,7 +109,7 @@ describe('PlayersController', () => {
       const dto: UpdatePlayerDto = {
         id: 'd630b1cc-efb1-45e3-9f92-ae9d2d25a1c6',
         name: 'Robert Lewandowski',
-        age: 35,
+        born: new Date('1988-08-21'),
         nationality: 'Poland',
         club: 'FC Barcelona',
         position: 'Stricker',
