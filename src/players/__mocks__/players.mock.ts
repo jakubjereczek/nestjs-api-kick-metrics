@@ -6,7 +6,7 @@ export const players: Player[] = [
   {
     id: 'd630b1cc-efb1-45e3-9f92-ae9d2d25a1c5',
     name: 'Cristiano Ronaldo',
-    age: 38,
+    born: new Date('1985-02-05'),
     nationality: 'Portuguese',
     club: 'Manchester United',
     position: 'Forward',
@@ -35,7 +35,7 @@ export const players: Player[] = [
   {
     id: 'd630b1cc-efb1-45e3-9f92-ae9d2d25a1c6',
     name: 'Robert Lewandowski',
-    age: 33,
+    born: new Date('1988-08-21'),
     nationality: 'Polish',
     club: 'Bayern Munich',
     position: 'Striker',
@@ -64,11 +64,11 @@ export const players: Player[] = [
 ];
 
 export const newPlayer = {
-  name: 'Arkadiusz Szymański',
-  age: 27,
-  nationality: 'Polish',
-  club: 'AC Milan',
-  position: 'Midfielder',
+  name: 'Lukas Nowak',
+  born: new Date('1993-04-15'),
+  nationality: 'Czech',
+  club: 'Borussia Dortmund',
+  position: 'Defender',
   statistics: {
     appearances: 30,
     goals: 10,

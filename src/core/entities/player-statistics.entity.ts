@@ -27,13 +27,13 @@ export class PlayerStatistics {
   @Column()
   passes_attempted: number;
 
-  @Column()
+  @Column({ type: 'double' })
   pass_accuracy: number;
 
   @Column()
   shots_on_target: number;
 
-  @Column()
+  @Column({ type: 'double' })
   shot_accuracy: number;
 
   @Column()
@@ -42,7 +42,7 @@ export class PlayerStatistics {
   @Column()
   dribbles_attempted: number;
 
-  @Column()
+  @Column({ type: 'double' })
   dribble_success_rate: number;
 
   @Column()

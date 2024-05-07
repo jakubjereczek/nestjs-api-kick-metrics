@@ -15,8 +15,8 @@ export class Player {
   @Column()
   name: string;
 
-  @Column()
-  age: number;
+  @Column({ type: 'date' })
+  born: Date;
 
   @Column()
   nationality: string;
