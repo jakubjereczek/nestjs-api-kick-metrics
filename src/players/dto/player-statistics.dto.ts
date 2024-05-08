@@ -1,4 +1,4 @@
-import { IsInt } from 'class-validator';
+import { IsInt, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class PlayerStatisticsDto {
@@ -34,7 +34,7 @@ export class PlayerStatisticsDto {
   })
   readonly passes_attempted: number;
 
-  @IsInt()
+  @IsNumber()
   @ApiProperty({
     description: 'Percentage of passes that were accurately completed',
   })
@@ -44,7 +44,7 @@ export class PlayerStatisticsDto {
   @ApiProperty({ description: 'Total number of shots that were on target' })
   readonly shots_on_target: number;
 
-  @IsInt()
+  @IsNumber()
   @ApiProperty({ description: 'Percentage of shots that were on target' })
   readonly shot_accuracy: number;
 
@@ -60,7 +60,7 @@ export class PlayerStatisticsDto {
   })
   readonly dribbles_attempted: number;
 
-  @IsInt()
+  @IsNumber()
   @ApiProperty({ description: 'Percentage of dribbles successfully completed' })
   readonly dribble_success_rate: number;
 

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsDate } from 'class-validator';
 import { PlayerStatisticsDto } from './player-statistics.dto';
 
 export class CreatePlayerDto {
@@ -7,7 +7,7 @@ export class CreatePlayerDto {
   @ApiProperty({ description: 'The full name of the player' })
   readonly name: string;
 
-  @IsInt()
+  @IsDate()
   @ApiProperty({ description: 'The born date of the player' })
   readonly born: Date;
 

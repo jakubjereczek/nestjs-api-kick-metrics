@@ -1,4 +1,3 @@
-import { UpdateResult } from 'typeorm';
 import {
   Body,
   Controller,
@@ -36,9 +35,13 @@ export class PlayersController {
     return await this.playersService.create(dto);
   }
 
-  @Put()
-  async updateById(@Body() dto: UpdatePlayerDto): Promise<UpdateResult> {
-    return await this.playersService.updateById(dto);
+  @Put(':id')
+  async updateById(
+    @Param('id')
+    id: string,
+    @Body() dto: UpdatePlayerDto,
+  ): Promise<Player> {
+    return await this.playersService.updateById(id, dto);
   }
 
   @Delete(':id')

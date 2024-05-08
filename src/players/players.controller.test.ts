@@ -42,12 +42,14 @@ describe('PlayersController', () => {
                 ...(club && { club }),
               });
             }),
-            updateById: jest.fn().mockImplementation((dto: UpdatePlayerDto) => {
-              return Promise.resolve({
-                ...findBy(players, 'id', dto.id),
-                ...dto,
-              });
-            }),
+            updateById: jest
+              .fn()
+              .mockImplementation((id: string, dto: UpdatePlayerDto) => {
+                return Promise.resolve({
+                  ...findBy(players, 'id', id),
+                  ...dto,
+                });
+              }),
             deleteById: jest
               .fn()
               .mockImplementation((id: string) =>
@@ -106,8 +108,8 @@ describe('PlayersController', () => {
 
   describe('updateById method: ', () => {
     it('should update player data', async () => {
+      const id = 'd630b1cc-efb1-45e3-9f92-ae9d2d25a1c6';
       const dto: UpdatePlayerDto = {
-        id: 'd630b1cc-efb1-45e3-9f92-ae9d2d25a1c6',
         name: 'Robert Lewandowski',
         born: new Date('1988-08-21'),
         nationality: 'Poland',
@@ -116,11 +118,11 @@ describe('PlayersController', () => {
         statistics: undefined,
       };
 
-      const result = await playersController.updateById(dto);
+      const result = await playersController.updateById(id, dto);
 
-      expect(playersService.updateById).toHaveBeenCalledWith(dto);
+      expect(playersService.updateById).toHaveBeenCalledWith(id, dto);
       expect(result).toEqual({
-        ...players['d630b1cc-efb1-45e3-9f92-ae9d2d25a1c6'],
+        ...findBy(players, 'id', id),
         ...dto,
       });
     });

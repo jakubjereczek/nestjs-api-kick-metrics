@@ -1,4 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
+import * as deepmerge from 'deepmerge';
+
 import { Repository } from 'typeorm';
 import { uuid } from 'uuidv4';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -16,11 +18,11 @@ export class PlayersService {
     private _statisticsRepository: Repository<PlayerStatistics>,
   ) {}
 
-  public create(player: CreatePlayerDto) {
+  public create(dto: CreatePlayerDto) {
     return this.playersRepository.save({
       id: uuid(),
-      ...player,
-      ...(!player.statistics && {
+      ...dto,
+      ...(!dto.statistics && {
         statistics: {
           appearances: 0,
           goals: 0,
@@ -101,8 +103,27 @@ export class PlayersService {
     }
   }
 
-  public async updateById({ id, ...player }: UpdatePlayerDto) {
-    return await this.playersRepository.update({ id }, player);
+  public async updateById(id: string, dto: UpdatePlayerDto) {
+    try {
+      const player = await this.getById(id);
+      if (!player) {
+        throw new HttpException(
+          'The record with the given id was not found.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      return (await this.playersRepository.save(
+        deepmerge(player, dto),
+      )) as Player;
+    } catch (error) {
+      console.error('Failed to update player.', error);
+
+      throw new HttpException(
+        'A generic server error occurred.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error },
+      );
+    }
   }
   public async deleteById(id: string): Promise<Player> {
     try {

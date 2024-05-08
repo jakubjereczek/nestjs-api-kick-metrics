@@ -1,20 +1,14 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsString, IsOptional } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsOptional, IsDate } from 'class-validator';
 import { PlayerStatisticsDto } from './player-statistics.dto';
 
 export class UpdatePlayerDto {
-  @IsString()
-  @ApiProperty({
-    description: 'ID (uuid v4) of the player',
-  })
-  readonly id: string;
-
   @IsString()
   @IsOptional()
   @ApiPropertyOptional({ description: 'The full name of the player' })
   readonly name: string;
 
-  @IsInt()
+  @IsDate()
   @IsOptional()
   @ApiPropertyOptional({ description: 'The born date of the player' })
   readonly born: Date;
