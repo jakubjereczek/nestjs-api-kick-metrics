@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { PlayersModule } from './players/players.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     PlayersModule,
+    AuthModule,
+    UsersModule,
     TypeOrmModule.forRoot({
       type: 'mssql',
       host: 'localhost',
@@ -22,7 +27,11 @@ import { PlayersModule } from './players/players.module';
       synchronize: true, // Should not be used in production, otherwise you can lost production data.
       autoLoadEntities: true,
     }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
+  providers: [],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}

@@ -7,7 +7,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Player } from '../core/entities/player.entity';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
-import { PlayerStatistics } from '../core//entities/player-statistics.entity';
+import { PlayerStatistics } from '../core/entities/player-statistics.entity';
 
 @Injectable()
 export class PlayersService {
@@ -18,10 +18,10 @@ export class PlayersService {
     private _statisticsRepository: Repository<PlayerStatistics>,
   ) {}
 
-  public create(dto: CreatePlayerDto) {
-    return this.playersRepository.save({
-      id: uuid(),
+  public async create(dto: CreatePlayerDto) {
+    return await this.playersRepository.save({
       ...dto,
+      id: uuid(),
       ...(!dto.statistics && {
         statistics: {
           appearances: 0,

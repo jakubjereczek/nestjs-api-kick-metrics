@@ -12,6 +12,9 @@ import { PlayersService } from './players.service';
 import { Player } from '../core/entities/player.entity';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
+import { Roles } from '../core/decorators/roles.decorator';
+import { Authorized } from '../core/decorators/Authorized.decorator';
+import { Role } from '../core/enums/role.enum';
 
 @Controller('players')
 export class PlayersController {
@@ -30,11 +33,15 @@ export class PlayersController {
     return await this.playersService.getAll();
   }
 
+  @Roles([Role.Moderator])
+  @Authorized()
   @Post()
   async create(@Body() dto: CreatePlayerDto): Promise<Player> {
     return await this.playersService.create(dto);
   }
 
+  @Roles([Role.Moderator])
+  @Authorized()
   @Put(':id')
   async updateById(
     @Param('id')
@@ -44,6 +51,8 @@ export class PlayersController {
     return await this.playersService.updateById(id, dto);
   }
 
+  @Roles([Role.Moderator])
+  @Authorized()
   @Delete(':id')
   async deleteById(
     @Param('id')
