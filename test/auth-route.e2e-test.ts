@@ -16,6 +16,10 @@ describe('Players (e2e)', () => {
     await app.init();
   });
 
+  beforeAll(() => {
+    token = undefined;
+  });
+
   it('/auth/register (POST)', () => {
     return request(app.getHttpServer())
       .post('/auth/register')

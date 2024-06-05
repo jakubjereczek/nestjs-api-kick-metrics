@@ -29,7 +29,7 @@ export class AuthorizedGuard implements CanActivate {
     if (authorized) {
       const request = context.switchToHttp().getRequest();
       const response = context.switchToHttp().getResponse();
-      const token = this.extractTokenFromHeader(request);
+      const token = extractTokenFromHeader(request);
       if (!token) {
         throw new UnauthorizedException();
       }
@@ -78,10 +78,10 @@ export class AuthorizedGuard implements CanActivate {
     }
     return true;
   }
+}
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] =
-      (request.headers['authorization'] as string)?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
-  }
+export function extractTokenFromHeader(request: Request): string | undefined {
+  const [type, token] =
+    (request.headers['authorization'] as string)?.split(' ') ?? [];
+  return type === 'Bearer' ? token : undefined;
 }
