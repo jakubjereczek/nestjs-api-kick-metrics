@@ -7,6 +7,7 @@ import { newPlayer } from '../src/players/__mocks__/players.mock';
 describe('Players (e2e)', () => {
   let app: INestApplication;
   let uuid: number | undefined;
+  let token: string | undefined;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -19,11 +20,26 @@ describe('Players (e2e)', () => {
 
   beforeAll(() => {
     uuid = undefined;
+    token = undefined;
+  });
+
+  it('authorize to intercept token', () => {
+    return request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        email: 'admin@gmail.com',
+        password: '123457',
+      })
+      .expect(200)
+      .expect((response) => {
+        token = response.headers['authorization'];
+      });
   });
 
   it('/players (POST)', () => {
     return request(app.getHttpServer())
       .post('/players')
+      .set('authorization', token)
       .send({
         name: 'Lukas Nowak',
         born: new Date('1993-04-15'),
@@ -82,6 +98,7 @@ describe('Players (e2e)', () => {
   it('players/${uuid} (PUT)', () => {
     return request(app.getHttpServer())
       .put(`/players/${uuid}`)
+      .set('authorization', token)
       .send({
         name: 'Jadon Sancho',
         born: new Date('2000-03-12'),
@@ -125,6 +142,11 @@ describe('Players (e2e)', () => {
   });
 
   it(`players/{uuid} (DELETE)`, () => {
-    return request(app.getHttpServer()).delete(`/players/${uuid}`).expect(200);
+    return request(app.getHttpServer())
+      .delete(`/players/${uuid}`)
+      .set('authorization', token)
+      .expect(200);
   });
 });
+
+// test roles

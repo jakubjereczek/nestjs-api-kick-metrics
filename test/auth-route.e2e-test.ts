@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 
-describe('Players (e2e)', () => {
+describe('Auth (e2e)', () => {
   let app: INestApplication;
   let token: string | undefined;
 
@@ -24,8 +24,8 @@ describe('Players (e2e)', () => {
     return request(app.getHttpServer())
       .post('/auth/register')
       .send({
-        email: 'jankowalski@gmail.com',
-        username: 'jankowalski',
+        email: 'user@gmail.com',
+        username: 'user',
         password: '123457',
       })
       .expect(409); // account already exists
@@ -46,7 +46,7 @@ describe('Players (e2e)', () => {
       return request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          email: 'jankowalski@gmail.com',
+          email: 'user@gmail.com',
           password: '12345744',
         })
         .expect(401); // account already exists
@@ -56,7 +56,7 @@ describe('Players (e2e)', () => {
       return request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          email: 'jankowalski@gmail.com',
+          email: 'user@gmail.com',
           password: '123457',
         })
         .expect(200)
@@ -83,7 +83,7 @@ describe('Players (e2e)', () => {
         .expect((response) => {
           expect(response.body).toMatchObject({
             id: '4BDB19B2-6BC0-411C-9CF2-61F14B7B2333',
-            email: 'jankowalski@gmail.com',
+            email: 'user@gmail.com',
             username: 'jankowalski',
             role: 'user',
             iat: expect.any(Number),
