@@ -19,11 +19,11 @@ export class UnauthorizedGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const unauthorized = this.reflector.get<boolean>(
+    const shouldValidate = this.reflector.get<boolean>(
       UNAUTHORIZED_KEY_KEY,
       context.getHandler(),
     );
-    if (unauthorized) {
+    if (shouldValidate) {
       const request = context.switchToHttp().getRequest();
       const token = extractTokenFromHeader(request);
       if (token) {

@@ -26,17 +26,6 @@ describe('PlayersController', () => {
               ),
             getAll: jest.fn().mockResolvedValue(players),
             getByParams: jest.fn().mockImplementation(({ id, club }: any) => {
-              console.log('return', {
-                response: findAllBy(players, {
-                  ...(id && { id }),
-                  ...(club && { club }),
-                }),
-                query: {
-                  id,
-                  club,
-                },
-                players,
-              });
               return findAllBy(players, {
                 ...(id && { id }),
                 ...(club && { club }),
